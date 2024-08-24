@@ -2,5 +2,5 @@
 
 public interface ISolarDataProvider
 { 
-    String GetLocation(string city);
+    String GetSolarForecast(string city);
 }

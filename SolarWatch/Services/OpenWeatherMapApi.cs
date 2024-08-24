@@ -2,18 +2,17 @@
 
 namespace SolarWatch.Services;
 
-public class SolarDataProvider : ISolarDataProvider
+public class OpenWeatherMapApi : ILocationDataProvider
 {
-    private readonly ILogger<SolarDataProvider> _logger;
+    private readonly ILogger<OpenWeatherMapApi> _logger;
 
-    public SolarDataProvider(ILogger<SolarDataProvider> logger)
+    public OpenWeatherMapApi(ILogger<OpenWeatherMapApi> logger)
     {
         _logger = logger;
     }
     
-    public string GetSolarForecast(string city)
+    public string GetLocation(string city)
     {
-        /*
         var apikey = Environment.GetEnvironmentVariable("APIKEY");
         var url = $"http://api.openweathermap.org/geo/1.0/direct?q={city}&appid={apikey}";
 
@@ -22,7 +21,5 @@ public class SolarDataProvider : ISolarDataProvider
         _logger.LogInformation("Calling OpenWeather API With url");
 
         return client.DownloadString(url);
-        */
-        throw new NotImplementedException();
     }
 }
