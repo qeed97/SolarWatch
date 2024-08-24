@@ -13,6 +13,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<ILocationDataProvider, OpenWeatherMapApi>();
 builder.Services.AddSingleton<ILocationJsonProcessor, LocationJsonProcessor>();
 builder.Services.AddSingleton<ISolarDataProvider, SolarDataProvider>();
+builder.Services.AddSingleton<ISolarJsonProcessor, SolarJsonProcessor>();
 
 var app = builder.Build();
 

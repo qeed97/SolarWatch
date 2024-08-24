@@ -7,12 +7,13 @@ public class LocationJsonProcessor : ILocationJsonProcessor
     public LocationCoordinates Process(string data)
     {
         JsonDocument json = JsonDocument.Parse(data);
+        JsonElement jsonElement = json.RootElement[0];
 
         LocationCoordinates coordinates = new LocationCoordinates
         {
-            Lat = json.RootElement.GetProperty("lat").GetDouble(),
-            Lon = json.RootElement.GetProperty("lon").GetDouble(),
-            Name = json.RootElement.GetProperty("name").GetString()
+            Lat = jsonElement.GetProperty("lat").GetDouble(),
+            Lon = jsonElement.GetProperty("lon").GetDouble(),
+            Name = jsonElement.GetProperty("name").GetString()
         };
 
         return coordinates;

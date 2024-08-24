@@ -11,18 +11,13 @@ public class SolarDataProvider : ISolarDataProvider
         _logger = logger;
     }
     
-    public string GetSolarForecast(string city)
+    public string GetSolarForecast(LocationCoordinates coordinates, DateTime date)
     {
-        /*
-        var apikey = Environment.GetEnvironmentVariable("APIKEY");
-        var url = $"http://api.openweathermap.org/geo/1.0/direct?q={city}&appid={apikey}";
+        var url = $"https://api.sunrise-sunset.org/json?lat={coordinates.Lat}&lng={coordinates.Lon}&date={date.Year}-{date.Month}-{date.Day}";
 
         using var client = new WebClient();
         
-        _logger.LogInformation("Calling OpenWeather API With url");
-
+        _logger.LogInformation("Calling sunrire/sunset api with url: {url}", url);
         return client.DownloadString(url);
-        */
-        throw new NotImplementedException();
     }
 }
