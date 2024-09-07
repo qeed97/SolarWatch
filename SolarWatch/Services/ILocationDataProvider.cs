@@ -2,5 +2,5 @@
 
 public interface ILocationDataProvider
 {
-    String GetLocation(string city);
+    Task<String> GetLocationAsync(string city);
 }
