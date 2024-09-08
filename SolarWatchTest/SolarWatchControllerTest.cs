@@ -31,65 +31,65 @@ public class SolarWatchControllerTest
     }
 
     [Test]
-    public void GetReturnsNotFoundResultWhenLocationDataProviderFails()
+    public async Task GetReturnsNotFoundResultWhenLocationDataProviderFails()
     {
-        _locationDataProviderMock.Setup(x => x.GetLocation(It.IsAny<string>())).Throws(new Exception());
+        _locationDataProviderMock.Setup(x => x.GetLocationAsync(It.IsAny<string>())).Throws(new Exception());
 
-        var result = _controller.Get(DateTime.Now, "sampleCity");
+        var result = await _controller.Get(DateTime.Now, "sampleCity");
         
         Assert.IsInstanceOf<NotFoundObjectResult>(result.Result);
     }
 
     [Test]
-    public void GetReturnsNotFoundResultWhenLocationJsonProcessorFails()
+    public async Task GetReturnsNotFoundResultWhenLocationJsonProcessorFails()
     {
-        _locationDataProviderMock.Setup(x => x.GetLocation(It.IsAny<string>())).Returns("{}");
+        _locationDataProviderMock.Setup(x => x.GetLocationAsync(It.IsAny<string>())).ReturnsAsync("{}");
         _locationJsonProcessorMock.Setup(x => x.Process(It.IsAny<string>())).Throws(new Exception());
 
-        var result = _controller.Get(DateTime.Now, "sampleCity");
+        var result = await _controller.Get(DateTime.Now, "sampleCity");
         
         Assert.IsInstanceOf<NotFoundObjectResult>(result.Result);
     }
 
     [Test]
-    public void GetReturnsNotFoundResultWhenSolarDataProviderFails()
+    public async Task GetReturnsNotFoundResultWhenSolarDataProviderFails()
     {
-        _locationDataProviderMock.Setup(x => x.GetLocation(It.IsAny<string>())).Returns("{}");
+        _locationDataProviderMock.Setup(x => x.GetLocationAsync(It.IsAny<string>())).ReturnsAsync("{}");
         _locationJsonProcessorMock.Setup(x => x.Process(It.IsAny<string>())).Returns(new LocationCoordinates());
-        _solarDataProviderMock.Setup(x => x.GetSolarForecast(It.IsAny<LocationCoordinates>(), It.IsAny<DateTime>()))
+        _solarDataProviderMock.Setup(x => x.GetSolarForecastAsync(It.IsAny<LocationCoordinates>(), It.IsAny<DateTime>()))
             .Throws(new Exception());
 
-        var result = _controller.Get(DateTime.Now, "sampleCity");
+        var result = await _controller.Get(DateTime.Now, "sampleCity");
         
         Assert.IsInstanceOf<NotFoundObjectResult>(result.Result);
     }
 
     [Test]
-    public void GetReturnsNotFoundResultWhenSolarJsonProcessorFails()
+    public async Task GetReturnsNotFoundResultWhenSolarJsonProcessorFails()
     {
-        _locationDataProviderMock.Setup(x => x.GetLocation(It.IsAny<string>())).Returns("{}");
+        _locationDataProviderMock.Setup(x => x.GetLocationAsync(It.IsAny<string>())).ReturnsAsync("{}");
         _locationJsonProcessorMock.Setup(x => x.Process(It.IsAny<string>())).Returns(new LocationCoordinates());
-        _solarDataProviderMock.Setup(x => x.GetSolarForecast(It.IsAny<LocationCoordinates>(), It.IsAny<DateTime>()))
-            .Returns("{}");
+        _solarDataProviderMock.Setup(x => x.GetSolarForecastAsync(It.IsAny<LocationCoordinates>(), It.IsAny<DateTime>()))
+            .ReturnsAsync("{}");
         _solarJsonProcessorMock.Setup(x => x.Process(It.IsAny<string>())).Throws(new Exception());
 
-        var result = _controller.Get(DateTime.Now, "sampleCity");
+        var result = await _controller.Get(DateTime.Now, "sampleCity");
         
         Assert.IsInstanceOf<NotFoundObjectResult>(result.Result);
     }
 
     [Test]
-    public void GetReturnsOkResultWhenAllProvidersAndProcessorsSucceed()
+    public async Task GetReturnsOkResultWhenAllProvidersAndProcessorsSucceed()
     {
         var expectedForecast = new SolarForecast();
-        _locationDataProviderMock.Setup(x => x.GetLocation(It.IsAny<string>())).Returns("{}");
+        _locationDataProviderMock.Setup(x => x.GetLocationAsync(It.IsAny<string>())).ReturnsAsync("{}");
         _locationJsonProcessorMock.Setup(x => x.Process(It.IsAny<string>())).Returns(new LocationCoordinates());
-        _solarDataProviderMock.Setup(x => x.GetSolarForecast(It.IsAny<LocationCoordinates>(), It.IsAny<DateTime>()))
-            .Returns("{}");
+        _solarDataProviderMock.Setup(x => x.GetSolarForecastAsync(It.IsAny<LocationCoordinates>(), It.IsAny<DateTime>()))
+            .ReturnsAsync("{}");
         _solarJsonProcessorMock.Setup(x => x.Process(It.IsAny<string>())).Returns(expectedForecast);
 
 
-        var result = _controller.Get(DateTime.Now, "sampleCity");
+        var result = await _controller.Get(DateTime.Now, "sampleCity");
         
         Assert.IsInstanceOf<OkObjectResult>(result.Result);
         Assert.That(((OkObjectResult)result.Result).Value, Is.EqualTo(expectedForecast));

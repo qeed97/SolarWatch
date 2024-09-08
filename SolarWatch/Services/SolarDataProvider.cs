@@ -11,13 +11,15 @@ public class SolarDataProvider : ISolarDataProvider
         _logger = logger;
     }
     
-    public string GetSolarForecast(LocationCoordinates coordinates, DateTime date)
+    public async Task<string> GetSolarForecastAsync(LocationCoordinates coordinates, DateTime date)
     {
         var url = $"https://api.sunrise-sunset.org/json?lat={coordinates.Lat}&lng={coordinates.Lon}&date={date.Year}-{date.Month}-{date.Day}";
 
-        using var client = new WebClient();
+        using var client = new HttpClient();
         
         _logger.LogInformation("Calling sunrire/sunset api with url: {url}", url);
-        return client.DownloadString(url);
+
+        var response = await client.GetAsync(url);
+        return await response.Content.ReadAsStringAsync();
     }
 }

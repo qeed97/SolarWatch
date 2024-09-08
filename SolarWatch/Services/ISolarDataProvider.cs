@@ -2,5 +2,5 @@
 
 public interface ISolarDataProvider
 { 
-    String GetSolarForecast(LocationCoordinates coordinates, DateTime date);
+    Task<String> GetSolarForecastAsync(LocationCoordinates coordinates, DateTime date);
 }

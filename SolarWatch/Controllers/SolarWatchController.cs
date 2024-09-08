@@ -24,14 +24,14 @@ public class SolarWatchController : ControllerBase
     }
 
     [HttpGet("GetSolarWatch")]
-    public ActionResult<SolarForecast> Get(DateTime date, string city)
+    public async Task<ActionResult<SolarForecast>> Get(DateTime date, string city)
     {
         // TODO: MAKE CITY REQUIRED (MAYBE DATE TOO)
         try
         {
-            var locationJson = _locationDataProvider.GetLocation(city);
+            var locationJson = await _locationDataProvider.GetLocationAsync(city);
             var locationData = _locationJsonProcessor.Process(locationJson);
-            var solarJson = _solarDataProvider.GetSolarForecast(locationData, date);
+            var solarJson = await _solarDataProvider.GetSolarForecastAsync(locationData, date);
             return Ok(_solarJsonProcessor.Process(solarJson));
         }
         catch (Exception e)
