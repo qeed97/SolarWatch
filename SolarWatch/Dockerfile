@@ -1,17 +1,23 @@
-﻿FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
+﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS build-env
+USER $APP_UID
 WORKDIR /app
+EXPOSE 8080
+EXPOSE 8081
 
-# Copy csproj and restore as distinct layers
-COPY *.csproj ./
-RUN dotnet restore
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+ARG BUILD_CONFIGURATION=Release
+WORKDIR /src
+COPY ["SolarWatch/SolarWatch.csproj", "SolarWatch/"]
+RUN dotnet restore "SolarWatch/SolarWatch.csproj"
+COPY . .
+WORKDIR "/src/SolarWatch"
+RUN dotnet build "SolarWatch.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-# Copy everything else and build
-COPY . ./
-RUN dotnet publish -c Release -o /app/out
+FROM build AS publish
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "SolarWatch.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
-# Build runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
+FROM base AS final
 WORKDIR /app
-COPY --from=build-env /app/out .
-ENV ASPNETCORE_URLS=http://+:80
+COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "SolarWatch.dll"]

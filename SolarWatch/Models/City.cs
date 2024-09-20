@@ -8,5 +8,12 @@ public class City
     public string State { get; set; }
     public double Latitude { get; set; }
     public double Longitude { get; set; }
+    private static int IdCounter = 1;
     public List<SolarData> SolarData { get; set; }
+
+    public City()
+    {
+        SolarData = new List<SolarData>();
+        Id = IdCounter++;
+    }
 }

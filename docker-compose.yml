@@ -1,0 +1,40 @@
+﻿services:
+  solar-watch:
+    image: mcr.microsoft.com/mssql/server:latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_ROOT_PASSWORD: Hurkakolbasz24?
+      MSSQL_DATABASE: solar-watch
+      MSSQL_USER: sa
+      MSSQL_PASSWORD: Hurkakolbasz24?
+    ports:
+      - "3306:3306"
+    env_file:
+      - ./SolarWatch/.env
+  
+  db-setup-migrate:
+    image: mcr.microsoft.com/dotnet/sdk:8.0
+    command: sh -c "cat /app/SolarWatch/SolarWatch.csproj && dotnet tool install --global dotnet-ef && /root/.dotnet/tools/dotnet-ef database update --project app/SolarWatch/SolarWatch.csproj"
+    depends_on:
+      - solar-watch
+    volumes:
+      - .:/app
+    env_file:
+      - ./SolarWatch/.env
+    environment:
+      - CONNECTIONSTRING=Server=${DOCKER_SERVER_NAME"},${DB_PORT};Database=${DB_NAME};User Id={DB_USERNAME};Password={DB_USER_PASSWORD};Encrypt=false;
+      
+  solarwatch-backend:
+    image: solarwatch
+    build:
+      context: .
+      dockerfile: SolarWatch/Dockerfile
+    depends_on:
+      - db-setup-migrate
+    ports:
+      - "8080:8080"
+    env_file:
+      - ./SolarWatch/.env
+    environment:
+      - CONNECTIONSTRING=Server=${DOCKER_SERVER_NAME"},${DB_PORT};Database=${DB_NAME};User Id={DB_USERNAME};Password={DB_USER_PASSWORD};Encrypt=false;
+      
