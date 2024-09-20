@@ -29,7 +29,41 @@ public class SolarDbContext : DbContext
     {
         modelBuilder.Entity<City>(entity =>
         {
+            entity.HasKey(c => c.Id);
             
+            entity.HasIndex(c => c.Id).IsUnique();
+            
+            entity.Property(c => c.Name).IsRequired();
+            
+            entity.Property(c => c.Country).IsRequired();
+
+            entity.Property(c => c.State);
+            
+            entity.Property(c => c.Latitude).IsRequired();
+            
+            entity.Property(c => c.Longitude).IsRequired();
+            
+            entity.HasMany(c => c.SolarData)
+                .WithOne(s => s.City)
+                .HasForeignKey(s => s.City.Id)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<SolarData>(entity =>
+        {
+            entity.HasKey(s => s.Id);
+            
+            entity.HasIndex(s => s.Id).IsUnique();
+            
+            entity.Property(s => s.Date).IsRequired();
+            
+            entity.Property(s => s.Sunrise).IsRequired();
+            
+            entity.Property(s => s.Sunset).IsRequired();
+
+            entity.HasOne(s => s.City)
+                .WithMany(c => c.SolarData)
+                .HasForeignKey(s => s.City.Id);
         });
     }
 }
