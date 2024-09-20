@@ -9,4 +9,5 @@ public interface ISolarDataRepository
     public SolarData CreateSolarData(SolarData solarData, City city);
     public void DeleteSolarData(SolarData solarData, City city);
     public SolarData UpdateSolarData(SolarData solarData);
+    public Task<SolarData?> GetSolarDataByDate(DateOnly date);
 }

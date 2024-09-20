@@ -40,4 +40,11 @@ public class SolarDataRepository(SolarDbContext context) : ISolarDataRepository
         context.SaveChanges();
         return solarData;
     }
+
+    public Task<SolarData?> GetSolarDataByDate(DateOnly date)
+    {
+        return context.SolarDatas
+            .Include(s => s.City)
+            .FirstOrDefaultAsync(s => s.Date == date);
+    }
 }
