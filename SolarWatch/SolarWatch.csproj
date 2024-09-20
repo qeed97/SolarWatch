@@ -27,8 +27,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Services\CityServices\" />
-      <Folder Include="Services\SolarDataServices\" />
+      <Folder Include="Services\SolarDataServices\Repository\" />
     </ItemGroup>
 
 </Project>
