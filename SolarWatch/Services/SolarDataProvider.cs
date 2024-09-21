@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using SolarWatch.Models;
 
 namespace SolarWatch.Services;
 
@@ -11,9 +12,9 @@ public class SolarDataProvider : ISolarDataProvider
         _logger = logger;
     }
     
-    public async Task<string> GetSolarForecastAsync(LocationCoordinates coordinates, DateTime date)
+    public async Task<string> GetSolarForecastAsync(City city, DateTime date)
     {
-        var url = $"https://api.sunrise-sunset.org/json?lat={coordinates.Lat}&lng={coordinates.Lon}&date={date.Year}-{date.Month}-{date.Day}";
+        var url = $"https://api.sunrise-sunset.org/json?lat={city.Latitude}&lng={city.Longitude}&date={date.Year}-{date.Month}-{date.Day}";
 
         using var client = new HttpClient();
         

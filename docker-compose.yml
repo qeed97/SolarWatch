@@ -1,16 +1,18 @@
 ﻿services:
   solar-watch:
-    image: mcr.microsoft.com/mssql/server:latest
+    image: mcr.microsoft.com/mssql/server:2022-latest
     environment:
       ACCEPT_EULA: "Y"
-      MSSQL_ROOT_PASSWORD: Hurkakolbasz24?
-      MSSQL_DATABASE: solar-watch
-      MSSQL_USER: sa
-      MSSQL_PASSWORD: Hurkakolbasz24?
+      SA_PASSWORD: Hurkakolbasz24?
     ports:
-      - "3306:3306"
+      - "1433:1433"
     env_file:
       - ./SolarWatch/.env
+    healthcheck:
+      test: [ "CMD", "sqlcmd", "-S", "localhost", "-U", "sa", "-P", "Hurkakolbasz24?", "-Q", "SELECT 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
   
   db-setup-migrate:
     image: mcr.microsoft.com/dotnet/sdk:8.0
@@ -22,7 +24,7 @@
     env_file:
       - ./SolarWatch/.env
     environment:
-      - CONNECTIONSTRING=Server=${DOCKER_SERVER_NAME"},${DB_PORT};Database=${DB_NAME};User Id={DB_USERNAME};Password={DB_USER_PASSWORD};Encrypt=false;
+      - CONNECTIONSTRING=Server=solar-watch,1433;Database=solar-watch;User Id=sa;Password=Hurkakolbasz24?;Encrypt=false;
       
   solarwatch-backend:
     image: solarwatch
@@ -36,5 +38,5 @@
     env_file:
       - ./SolarWatch/.env
     environment:
-      - CONNECTIONSTRING=Server=${DOCKER_SERVER_NAME"},${DB_PORT};Database=${DB_NAME};User Id={DB_USERNAME};Password={DB_USER_PASSWORD};Encrypt=false;
+      - CONNECTIONSTRING=Server=solar-watch,1433;Database=solar-watch;User Id=sa;Password=Hurkakolbasz24?;Encrypt=false;
       

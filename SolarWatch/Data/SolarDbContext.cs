@@ -45,7 +45,7 @@ public class SolarDbContext : DbContext
             
             entity.HasMany(c => c.SolarData)
                 .WithOne(s => s.City)
-                .HasForeignKey(s => s.City.Id)
+                .HasForeignKey(s => s.CityId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
@@ -63,7 +63,7 @@ public class SolarDbContext : DbContext
 
             entity.HasOne(s => s.City)
                 .WithMany(c => c.SolarData)
-                .HasForeignKey(s => s.City.Id);
+                .HasForeignKey(s => s.CityId);
         });
     }
 }

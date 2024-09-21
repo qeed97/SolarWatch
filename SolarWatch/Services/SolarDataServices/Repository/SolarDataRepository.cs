@@ -6,6 +6,10 @@ namespace SolarWatch.Services.SolarDataServices.Repository;
 
 public class SolarDataRepository(SolarDbContext context) : ISolarDataRepository
 {
+    public bool CheckIfSolarDataExists(DateOnly date, City city)
+    {
+        return city.SolarData.FirstOrDefault(x => x.Date == date) is not null;
+    }
     public IEnumerable<SolarData> GetSolarData()
     {
         return context.SolarDatas
