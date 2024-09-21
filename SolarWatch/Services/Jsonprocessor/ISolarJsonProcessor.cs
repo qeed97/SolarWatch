@@ -1,6 +1,8 @@
-﻿namespace SolarWatch.Services.Jsonprocessor;
+﻿using SolarWatch.Models;
+
+namespace SolarWatch.Services.Jsonprocessor;
 
 public interface ISolarJsonProcessor
 {
-    SolarForecast Process(string data);
+    SolarData Process(string data, DateOnly date, City city);
 }

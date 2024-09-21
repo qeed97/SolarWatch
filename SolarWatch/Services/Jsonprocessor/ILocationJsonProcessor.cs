@@ -1,6 +1,8 @@
-﻿namespace SolarWatch.Services.Jsonprocessor;
+﻿using SolarWatch.Models;
+
+namespace SolarWatch.Services.Jsonprocessor;
 
 public interface ILocationJsonProcessor
 {
-    LocationCoordinates Process(string data);
+    City Process(string data);
 }

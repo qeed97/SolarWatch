@@ -1,21 +1,24 @@
 ﻿using System.Text.Json;
+using SolarWatch.Models;
 
 namespace SolarWatch.Services.Jsonprocessor;
 
 public class LocationJsonProcessor : ILocationJsonProcessor
 {
-    public LocationCoordinates Process(string data)
+    public City Process(string data)
     {
         JsonDocument json = JsonDocument.Parse(data);
         JsonElement jsonElement = json.RootElement[0];
 
-        LocationCoordinates coordinates = new LocationCoordinates
+        City city = new City
         {
-            Lat = jsonElement.GetProperty("lat").GetDouble(),
-            Lon = jsonElement.GetProperty("lon").GetDouble(),
-            Name = jsonElement.GetProperty("name").GetString()
+            Name = jsonElement.GetProperty("name").GetString(),
+            Country = jsonElement.GetProperty("country").GetString(),
+            Latitude = jsonElement.GetProperty("lat").GetDouble(),
+            Longitude = jsonElement.GetProperty("lon").GetDouble(),
+            State = jsonElement.GetProperty("state").GetString(),
         };
 
-        return coordinates;
+        return city;
     }
 }

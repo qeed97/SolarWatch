@@ -14,8 +14,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<SolarDbContext>();
-builder.Services.AddSingleton<ICityRepository, CityRepository>();
-builder.Services.AddSingleton<ISolarDataRepository, SolarDataRepository>();
+builder.Services.AddScoped<ICityRepository, CityRepository>();
+builder.Services.AddScoped<ISolarDataRepository, SolarDataRepository>();
 builder.Services.AddSingleton<ILocationDataProvider, OpenWeatherMapApi>();
 builder.Services.AddSingleton<ILocationJsonProcessor, LocationJsonProcessor>();
 builder.Services.AddSingleton<ISolarDataProvider, SolarDataProvider>();

@@ -6,6 +6,15 @@ namespace SolarWatch.Services.CityServices.Repository;
 
 public class CityRepository(SolarDbContext context) : ICityRepository
 {
+
+    public async Task<bool> CheckIfCityExists(string cityName)
+    {
+        if (context.Cities == null)
+        {
+            throw new InvalidOperationException("Database context is not initialized properly.");
+        }
+        return await context.Cities.FirstOrDefaultAsync(c => c.Name == cityName) != null;
+    }
     public void CreateCity(City city)
     {
         context.Cities.Add(city);
