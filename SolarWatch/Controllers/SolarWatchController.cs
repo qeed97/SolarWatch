@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SolarWatch.Models;
 using SolarWatch.Services;
 using SolarWatch.Services.CityServices.Repository;
@@ -30,7 +31,7 @@ public class SolarWatchController : ControllerBase
         _solarDataRepository = solarDataRepository;
     }
 
-    [HttpGet("GetSolarWatch")]
+    [HttpGet("GetSolarWatch"), Authorize]
     public async Task<ActionResult<SolarForecast>> Get(DateTime date, string cityName)
     {
         // TODO: MAKE CITY REQUIRED (MAYBE DATE TOO)
