@@ -1,5 +1,6 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SolarWatch.Data;
 using SolarWatch.Services;
@@ -40,6 +41,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["IssuerSigningKey"]))
         };
     });
+
+builder.Services.AddDbContext<UsersContext>(options =>
+{
+    options.UseSqlServer(
+        $"Server=solar-watch,1433;Database=solar-watch;User Id=sa;Password=Hurkakolbasz24?;Encrypt=false;");
+});
 
 var app = builder.Build();
 
