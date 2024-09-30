@@ -1,3 +1,6 @@
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using SolarWatch.Data;
 using SolarWatch.Services;
 using SolarWatch.Services.CityServices.Repository;
@@ -20,6 +23,23 @@ builder.Services.AddSingleton<ILocationDataProvider, OpenWeatherMapApi>();
 builder.Services.AddSingleton<ILocationJsonProcessor, LocationJsonProcessor>();
 builder.Services.AddSingleton<ISolarDataProvider, SolarDataProvider>();
 builder.Services.AddSingleton<ISolarJsonProcessor, SolarJsonProcessor>();
+var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters()
+        {
+            ClockSkew = TimeSpan.Zero,
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = jwtSettings["ValidIssuer"],
+            ValidAudience = jwtSettings["ValidAudience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["IssuerSigningKey"]))
+        };
+    });
 
 var app = builder.Build();
 
@@ -31,6 +51,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
