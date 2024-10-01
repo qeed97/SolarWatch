@@ -23,6 +23,7 @@ builder.Services.AddDbContext<SolarDbContext>();
 builder.Services.AddScoped<ICityRepository, CityRepository>();
 builder.Services.AddScoped<ISolarDataRepository, SolarDataRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddSingleton<ILocationDataProvider, OpenWeatherMapApi>();
 builder.Services.AddSingleton<ILocationJsonProcessor, LocationJsonProcessor>();
 builder.Services.AddSingleton<ISolarDataProvider, SolarDataProvider>();
