@@ -5,6 +5,7 @@ namespace SolarWatch.Services.Authentication;
 public class AuthService : IAuthService
 {
     private readonly UserManager<IdentityUser> _userManager;
+    private readonly ITokenService _tokenService;
     
     public async Task<AuthResult> RegisterAsync(string email, string username, string password)
     {
@@ -28,5 +29,40 @@ public class AuthService : IAuthService
         }
         
         return authResult;
+    }
+
+    public async Task<AuthResult> LoginAsync(string email, string password)
+    {
+        var managedUser = await _userManager.FindByEmailAsync(email);
+
+        if (managedUser == null)
+        {
+            return InvalidEmail(email);
+        }
+        
+        var isPasswordValid = await _userManager.CheckPasswordAsync(managedUser, password);
+
+        if (!isPasswordValid)
+        {
+            return InvalidPassword(email, managedUser.UserName);
+        }
+        
+        var accessToken = _tokenService.CreateToken(managedUser);
+        
+        return new AuthResult(true, managedUser.Email, managedUser.UserName, accessToken);
+    }
+
+    private static AuthResult InvalidEmail(string email)
+    {
+        var result = new AuthResult(false, email, "", "");
+        result.ErrorMessages.Add("Bad Credentials", "Invalid Email or Password");
+        return result;
+    }
+
+    private static AuthResult InvalidPassword(string email, string username)
+    {
+        var result = new AuthResult(false, email, username, "");
+        result.ErrorMessages.Add("Bad Credentials", "Invalid Email or Password");
+        return result;
     }
 }
