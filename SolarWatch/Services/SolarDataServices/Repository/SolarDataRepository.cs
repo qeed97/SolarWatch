@@ -10,6 +10,11 @@ public class SolarDataRepository(SolarDbContext context) : ISolarDataRepository
     {
         return city.SolarData.FirstOrDefault(x => x.Date == date) is not null;
     }
+
+    public IEnumerable<SolarData> GetSolarDataForCity(City city)
+    {
+        return city.SolarData;
+    }
     public IEnumerable<SolarData> GetSolarData()
     {
         return context.SolarDatas
@@ -38,6 +43,14 @@ public class SolarDataRepository(SolarDbContext context) : ISolarDataRepository
         context.SaveChanges();
     }
 
+    public SolarData UpdateOldSolarData(SolarData solarData, UpdatedSolarData updatedSolarData)
+    {
+        solarData.Date = updatedSolarData.Date;
+        solarData.Sunrise = updatedSolarData.Sunrise;
+        solarData.Sunset = updatedSolarData.Sunset;
+        return solarData;
+    }
+    
     public SolarData UpdateSolarData(SolarData solarData)
     {
         context.Update(solarData);
