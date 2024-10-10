@@ -32,7 +32,7 @@ public class SolarWatchController : ControllerBase
     }
 
     [HttpGet("GetSolarWatch"), Authorize(Roles ="User, Admin")]
-    public async Task<ActionResult<SolarForecast>> Get(DateTime date, string cityName)
+    public async Task<ActionResult<SolarData>> Get(DateTime date, string cityName)
     {
         // TODO: MAKE CITY REQUIRED (MAYBE DATE TOO)
         try
@@ -47,7 +47,7 @@ public class SolarWatchController : ControllerBase
                 var solarJson = await _solarDataProvider.GetSolarForecastAsync(city, date);
                 solarData = _solarJsonProcessor.Process(solarJson, DateOnly.FromDateTime(date), city);
                 _solarDataRepository.CreateSolarData(solarData, city);
-                return Ok(new SolarForecast{Sunrise = solarData.Sunrise, SunSet = solarData.Sunset});
+                return Ok(solarData);
             }
             city = await _cityRepository.GetCityByName(cityName);
             if (!_solarDataRepository.CheckIfSolarDataExists(DateOnly.FromDateTime(date), city))
@@ -66,5 +66,132 @@ public class SolarWatchController : ControllerBase
             return NotFound("Error getting solar data");
         }
         
+    }
+
+    [HttpGet("GetExistingSolarWatch"), Authorize(Roles = "User, Admin")]
+    public async Task<ActionResult<IEnumerable<SolarData>>> GetExistingSolarWatch(string cityName)
+    {
+        try
+        {
+            var city = new City();
+            if (!await _cityRepository.CheckIfCityExists(cityName))
+            {
+                return NotFound("City not found");
+            }
+
+            city = await _cityRepository.GetCityByName(cityName);
+            var solarDatas = _solarDataRepository.GetSolarDataForCity(city);
+            if (!solarDatas.Any())
+            {
+                return NotFound("No solar data found");
+            }
+            return Ok(solarDatas);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error getting solar data");
+            return NotFound("Error getting solar data");
+        }
+    }
+
+    [HttpGet("GetExistingCities"), Authorize(Roles = "User, Admin")]
+    public async Task<ActionResult<IEnumerable<City>>> GetExistingCities()
+    {
+        try
+        {
+            var cities = _cityRepository.GetCities();
+            if (!cities.Any())
+            {
+                return NotFound("No cities found");
+            }
+            return Ok(cities);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error getting city data");
+            return NotFound("Error getting city data");
+        }
+    }
+
+    [HttpPut("UpdateSolarData"), Authorize(Roles = "Admin")]
+    public async Task<ActionResult<SolarData>> ChangeSolarData([FromBody] UpdatedSolarData updatedSolarData, int id)
+    {
+        try
+        {
+            var solarData = await _solarDataRepository.GetSolarDataById(id);
+            if (solarData == null)
+            {
+                return NotFound("Solar data not found");
+            }
+            
+            var updated = _solarDataRepository.UpdateOldSolarData(solarData, updatedSolarData);
+            return Ok(_solarDataRepository.UpdateSolarData(updated));
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error changing solar data");
+            return NotFound("Error changing solar data");
+        }
+    }
+
+    [HttpPut("UpdateCity"), Authorize(Roles = "Admin")]
+    public async Task<ActionResult<City>> UpdateCity([FromBody] UpdatedCity updatedCity, int id)
+    {
+        try
+        {
+            var city = await _cityRepository.GetCityById(id);
+            if (city == null)
+            {
+                return NotFound("City not found");
+            }
+            
+            var updated = _cityRepository.UpdateOldCity(city, updatedCity);
+            return Ok(_cityRepository.UpdateCity(updated));
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error updating city");
+            return NotFound("Error updating city");
+        }
+    }
+
+    [HttpDelete("DeleteSolarData"), Authorize(Roles = "Admin")]
+    public async Task<ActionResult> DeleteSolarData(int id)
+    {
+        try
+        {
+            var solarData = await _solarDataRepository.GetSolarDataById(id);
+            if (solarData == null)
+            {
+                return NotFound("Solar data not found");
+            }
+            _solarDataRepository.DeleteSolarData(solarData, solarData.City);
+            return Ok("Solar data deleted");
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error deleting solar data");
+            return NotFound("Error deleting solar data");
+        }
+    }
+
+    [HttpDelete("DeleteCity"), Authorize(Roles = "Admin")]
+    public async Task<ActionResult> DeleteCity(int id)
+    {
+        try
+        {
+            var city = await _cityRepository.GetCityById(id);
+            if (city == null)
+            {
+                return NotFound("City not found");
+            }
+            _cityRepository.DeleteCity(city);
+            return Ok("City deleted");
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error deleting city");
+            return NotFound("Error deleting city");
+        }
     }
 }

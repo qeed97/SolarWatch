@@ -27,6 +27,13 @@ public class CityRepository(SolarDbContext context) : ICityRepository
             .Include(c => c.SolarData);
     }
 
+    public async Task<City?> GetCityById(int id)
+    {
+        return await context.Cities
+            .Include(c => c.SolarData)
+            .FirstOrDefaultAsync(c => c.Id == id);
+    }
+    
     public async ValueTask<City?> GetCityByName(string name)
     {
         return await context.Cities
@@ -34,6 +41,16 @@ public class CityRepository(SolarDbContext context) : ICityRepository
             .FirstOrDefaultAsync(c => c.Name == name);
     }
 
+    public City UpdateOldCity(City city, UpdatedCity updatedCity)
+    {
+        city.Name = updatedCity.Name;
+        city.Country = updatedCity.Country;
+        city.State = updatedCity.State;
+        city.Longitude = updatedCity.Longitude;
+        city.Latitude = updatedCity.Latitude;
+        return city;
+    }
+    
     public City UpdateCity(City city)
     {
         context.Update(city);
