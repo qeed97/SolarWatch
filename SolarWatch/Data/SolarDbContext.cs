@@ -1,13 +1,17 @@
 using Microsoft.EntityFrameworkCore;
 using System;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using SolarWatch.Models;
 
 namespace SolarWatch.Data;
 
-public class SolarDbContext : DbContext
+public class SolarDbContext : IdentityDbContext<IdentityUser, IdentityRole, string>
 {
+    public SolarDbContext(DbContextOptions<SolarDbContext> options) : base(options) 
+    {
+    }
     public DbSet<City> Cities { get; set; }
-    
     public DbSet<SolarData> SolarDatas { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -27,6 +31,8 @@ public class SolarDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+        
         modelBuilder.Entity<City>(entity =>
         {
             entity.HasKey(c => c.Id);

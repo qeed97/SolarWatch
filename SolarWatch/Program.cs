@@ -19,7 +19,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<SolarDbContext>();
 builder.Services.AddScoped<ICityRepository, CityRepository>();
 builder.Services.AddScoped<ISolarDataRepository, SolarDataRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -47,7 +46,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-builder.Services.AddDbContext<UsersContext>(options =>
+builder.Services.AddDbContext<SolarDbContext>(options =>
 {
     options.UseSqlServer(
         $"Server=solar-watch,1433;Database=solar-watch;User Id=sa;Password=Hurkakolbasz24?;Encrypt=false;");
@@ -65,9 +64,21 @@ builder.Services
         options.Password.RequireLowercase = false;
     })
     .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<UsersContext>();
+    .AddEntityFrameworkStores<SolarDbContext>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigins", innerBuilder =>
+    {
+        innerBuilder
+            .WithOrigins("http://localhost:5173")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials();
+    });
+}); 
 
+builder.Services.AddControllers();
 
 var app = builder.Build();
 
@@ -83,6 +94,17 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseRouting();
+
+app.UseCors("AllowFrontend");
+
+app.UseAuthorization();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 
 app.UseHttpsRedirection();
 
