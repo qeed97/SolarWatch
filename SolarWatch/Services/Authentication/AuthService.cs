@@ -6,6 +6,12 @@ public class AuthService : IAuthService
 {
     private readonly UserManager<IdentityUser> _userManager;
     private readonly ITokenService _tokenService;
+
+    public AuthService(UserManager<IdentityUser> userManager, ITokenService tokenService)
+    {
+        _userManager = userManager;
+        _tokenService = tokenService;
+    }
     
     public async Task<AuthResult> RegisterAsync(string email, string username, string password, string role)
     {
