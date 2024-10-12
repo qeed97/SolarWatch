@@ -39,6 +39,6 @@
       - ./SolarWatch/.env
     environment:
       - CONNECTIONSTRING=Server=solar-watch,1433;Database=solar-watch;User Id=sa;Password=Hurkakolbasz24?;Encrypt=false;
-      - JwtSettings__IssuerSigningKey=nyolchaborukalapacs
+      - JwtSettings__IssuerSigningKey=nyolchaborukalapacsesmegapatkanyirtasismelle
       - JwtSettings__ValidIssuer=apiWithAuthBackend
       - JwtSettings__ValidAudience=apiWithAuthBackend
