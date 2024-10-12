@@ -4,6 +4,7 @@ import {Link, useNavigate} from 'react-router-dom';
 import {toast} from 'react-hot-toast';
 
 function Register(props) {
+    const navigate = useNavigate();
     const [newUserData, setNewUserData] = useState({});
     const [submittable, setSubmittable] = useState(false);
     const showSuccessToast = (data) => toast.success(data.message);
