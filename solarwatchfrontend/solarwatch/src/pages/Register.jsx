@@ -5,8 +5,18 @@ import {toast} from 'react-hot-toast';
 
 function Register(props) {
     const [newUserData, setNewUserData] = useState({});
+    const [submittable, setSubmittable] = useState(false);
     const showSuccessToast = (data) => toast.success(data.message);
     const showErrorToast = (data) => toast.error(data.message);
+    useEffect(() => {
+        if (
+            newUserData.UserName &&
+            newUserData.Email &&
+            newUserData.Password
+        ) {
+            setSubmittable(true);
+        }
+    }, [newUserData]);
 
     const handleSignup = async () => {
         const response = await fetch('/api/Auth/Register', {
@@ -78,12 +88,14 @@ function Register(props) {
                                 handleSignup(event).then((data) => {
                                     if (data.message) {
                                         showErrorToast(data.message);
+                                    } else {
+                                        navigate('/login')
                                     }
                                 })
                             }
                         }
                         className='w-full mt-6 bg-blue-500 hover:bg-blue-600 text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center cursor-pointer'
-
+                        disabled={!submittable}
                     >
                         Sign up
                     </button>
@@ -93,7 +105,9 @@ function Register(props) {
             {' '}
               Already have an account?{' '}
           </span>
-
+                    <Link to='/login' className='font-medium text-blue-700'>
+                        Login!
+                    </Link>
                 </div>
             </div>
         </div>
