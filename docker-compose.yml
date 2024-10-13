@@ -7,7 +7,7 @@
     ports:
       - "1433:1433"
     env_file:
-      - ./SolarWatch/.env
+      - .env
     healthcheck:
       test: [ "CMD", "sqlcmd", "-S", "localhost", "-U", "sa", "-P", "Hurkakolbasz24?", "-Q", "SELECT 1" ]
       interval: 30s
@@ -22,9 +22,9 @@
     volumes:
       - .:/app
     env_file:
-      - ./SolarWatch/.env
+      - .env
     environment:
-      - CONNECTIONSTRING=Server=solar-watch,1433;Database=solar-watch;User Id=sa;Password=Hurkakolbasz24?;Encrypt=false;
+      - CONNECTIONSTRING=Server=${DOCKER_SERVER_NAME},${DB_PORT};Database=${DB_NAME};User Id=${DB_USERNAME};Password=${DB_USER_PASSWORD};Encrypt=false;
       
   solarwatch-backend:
     image: solarwatch
@@ -36,9 +36,10 @@
     ports:
       - "8080:8080"
     env_file:
-      - ./SolarWatch/.env
+      - .env
     environment:
-      - CONNECTIONSTRING=Server=solar-watch,1433;Database=solar-watch;User Id=sa;Password=Hurkakolbasz24?;Encrypt=false;
-      - JwtSettings__IssuerSigningKey=nyolchaborukalapacsesmegapatkanyirtasismelle
-      - JwtSettings__ValidIssuer=apiWithAuthBackend
-      - JwtSettings__ValidAudience=apiWithAuthBackend
+      - CONNECTIONSTRING=Server=${DOCKER_SERVER_NAME},${DB_PORT};Database=${DB_NAME};User Id=${DB_USERNAME};Password=${DB_USER_PASSWORD};Encrypt=false;
+      - JwtSettings__IssuerSigningKey=${JWTSETTINGS__ISSUERSIGNINGKEY}
+      - JwtSettings__ValidIssuer=${JWTSETTINGS__VALIDISSUER}
+      - JwtSettings__ValidAudience=${JWTSETTINGS__VALIDAUDIENCE}
+        
