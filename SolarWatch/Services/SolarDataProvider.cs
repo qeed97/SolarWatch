@@ -12,7 +12,7 @@ public class SolarDataProvider : ISolarDataProvider
         _logger = logger;
     }
     
-    public async Task<string> GetSolarForecastAsync(City city, DateTime date)
+    public async Task<string> GetSolarForecastAsync(City city, DateOnly date)
     {
         var url = $"https://api.sunrise-sunset.org/json?lat={city.Latitude}&lng={city.Longitude}&date={date.Year}-{date.Month}-{date.Day}";
 

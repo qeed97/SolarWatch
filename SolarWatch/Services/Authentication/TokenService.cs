@@ -20,7 +20,7 @@ public class TokenService : ITokenService
     public string CreateToken(IdentityUser user, string? role)
     {
         var expiration = DateTime.UtcNow.AddMinutes(ExpirationMinutes);
-
+        
         var token = CreateJwtToken(
             CreateClaims(user, role),
             CreateSigninCredentials(),
@@ -35,8 +35,8 @@ public class TokenService : ITokenService
     private JwtSecurityToken CreateJwtToken(List<Claim> claims, SigningCredentials signingCredentials,
         DateTime expiration) =>
         new(
-            _configuration["JwtSettings:Issuer"],
-            _configuration["JwtSettings:Audience"],
+            _configuration["JwtSettings:ValidIssuer"],
+            _configuration["JwtSettings:ValidAudience"],
             claims,
             expires: expiration,
             signingCredentials: signingCredentials);
