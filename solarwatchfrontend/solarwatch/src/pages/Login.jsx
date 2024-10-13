@@ -17,7 +17,7 @@ function Login({setUserLoginCookies}) {
 
     useEffect(() => {
         if (cookies.user){
-            navigate('/main');
+            navigate('/solarforecast');
         }
     }, [cookies]);
 

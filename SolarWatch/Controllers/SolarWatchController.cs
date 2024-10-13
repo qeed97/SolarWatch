@@ -31,12 +31,14 @@ public class SolarWatchController : ControllerBase
         _solarDataRepository = solarDataRepository;
     }
 
-    [HttpGet("GetSolarWatch"), Authorize(Roles ="User, Admin")]
-    public async Task<ActionResult<SolarData>> Get(DateTime date, string cityName)
+    [HttpPost("GetSolarWatch"), Authorize(Roles ="User, Admin")]
+    public async Task<ActionResult<SolarData>> Get(DateOnly date, string cityName)
     {
         // TODO: MAKE CITY REQUIRED (MAYBE DATE TOO)
         try
         {
+            Console.WriteLine(date);
+            Console.WriteLine(cityName);
             var city = new City();
             var solarData = new SolarData();
             if (!await _cityRepository.CheckIfCityExists(cityName))
@@ -45,19 +47,19 @@ public class SolarWatchController : ControllerBase
                 city = _locationJsonProcessor.Process(locationJson);
                 _cityRepository.CreateCity(city);
                 var solarJson = await _solarDataProvider.GetSolarForecastAsync(city, date);
-                solarData = _solarJsonProcessor.Process(solarJson, DateOnly.FromDateTime(date), city);
+                solarData = _solarJsonProcessor.Process(solarJson, date, city);
                 _solarDataRepository.CreateSolarData(solarData, city);
                 return Ok(solarData);
             }
             city = await _cityRepository.GetCityByName(cityName);
-            if (!_solarDataRepository.CheckIfSolarDataExists(DateOnly.FromDateTime(date), city))
+            if (!_solarDataRepository.CheckIfSolarDataExists(date, city))
             {
                 var solarJson = await _solarDataProvider.GetSolarForecastAsync(city, date);
-                solarData = _solarJsonProcessor.Process(solarJson, DateOnly.FromDateTime(date), city);
+                solarData = _solarJsonProcessor.Process(solarJson, date, city);
                 _solarDataRepository.CreateSolarData(solarData, city);
                 return Ok(solarData);
             }
-            solarData = await _solarDataRepository.GetSolarDataByDate(DateOnly.FromDateTime(date));
+            solarData = await _solarDataRepository.GetSolarDataByDate(date);
             return Ok(solarData);
         }
         catch (Exception e)
