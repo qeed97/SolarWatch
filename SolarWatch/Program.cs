@@ -45,12 +45,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["IssuerSigningKey"]))
         };
     });
-
-builder.Services.AddDbContext<SolarDbContext>(options =>
+if (!builder.Environment.IsEnvironment("Testing"))
 {
-    options.UseSqlServer(
-        $"Server=solar-watch,1433;Database=solar-watch;User Id=sa;Password=Hurkakolbasz24?;Encrypt=false;");
-});
+    builder.Services.AddDbContext<SolarDbContext>(options =>
+    {
+        options.UseSqlServer(
+            $"Server={Environment.GetEnvironmentVariable("DOCKER_SERVER_NAME")},{Environment.GetEnvironmentVariable("DB_PORT")};Database={Environment.GetEnvironmentVariable("DB_NAME")};User Id={Environment.GetEnvironmentVariable("DB_USERNAME")};Password={Environment.GetEnvironmentVariable("DB_USER_PASSWORD")};Encrypt=false;");
+    });
+}
 
 builder.Services
     .AddIdentityCore<IdentityUser>(options =>
@@ -117,3 +119,5 @@ app.UseHttpsRedirection();
 app.MapControllers();
 
 app.Run();
+
+public partial class Program { }
