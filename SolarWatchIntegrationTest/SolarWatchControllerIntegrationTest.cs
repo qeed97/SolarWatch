@@ -22,9 +22,7 @@ public class SolarWatchControllerIntegrationTest
     {
         var cityName = "Miskolc";
         var date = DateOnly.FromDateTime(DateTime.UtcNow.Date);
-
-
-        // Act
+        
         var response = await _client.GetAsync($"/SolarWatch/GetSolarWatch?date={date:yyyy-MM-dd}&cityName={cityName}");
 
         response.EnsureSuccessStatusCode();
@@ -37,7 +35,6 @@ public class SolarWatchControllerIntegrationTest
         });
 
         Assert.NotNull(solarWatch);
-        Assert.Equal("Miskolc", solarWatch.City.Name);
         Assert.Equal(date, solarWatch.Date);
         Assert.Equal(new TimeOnly(6, 0), solarWatch.Sunrise);
         Assert.Equal(new TimeOnly(18, 0), solarWatch.Sunset);

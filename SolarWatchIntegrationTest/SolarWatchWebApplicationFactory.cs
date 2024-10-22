@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -27,14 +28,10 @@ public class SolarWatchWebApplicationFactory : WebApplicationFactory<Program>
                 services.Remove(solarWatchDbContextDescriptor);
             }
             
+            services.AddAuthentication("Test").AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("Test", options => { });
 
             services.AddDbContext<SolarDbContext>(options => options.UseInMemoryDatabase(_dbName));
             
-            services.AddSingleton(new HttpClient(new MockHttpMessageHandler()));  // Use the mocked HttpClient
-            
-            services.AddTransient<ISolarDataProvider, SolarDataProvider>();  // Re-register service if necessary
-            services.AddTransient<ILocationDataProvider, OpenWeatherMapApi>();
-
             using var scope = services.BuildServiceProvider().CreateScope();
 
             var solarContext = scope.ServiceProvider.GetRequiredService<SolarDbContext>();
@@ -52,14 +49,40 @@ public class SolarWatchWebApplicationFactory : WebApplicationFactory<Program>
             State = "Borsod-Abaúj-Zemplén",
             Country = "Hungary",
             Latitude = 48.1030,
-            Longitude = 20.7789
+            Longitude = 20.7789,
+            SolarData =
+            [
+                new SolarData
+                {
+                    Date = DateOnly.FromDateTime(DateTime.UtcNow.Date),
+                    Sunrise = new TimeOnly(6, 0),
+                    Sunset = new TimeOnly(18, 0),
+                    City = new City
+                    {
+                        Name = "Miskolc",
+                        State = "Borsod-Abaúj-Zemplén",
+                        Country = "Hungary",
+                        Latitude = 48.1030,
+                        Longitude = 20.7789
+                    },
+                    CityId = 1
+                }
+            ]
         };
        
         var sunriseSunset = new SolarData
         {
             Date = DateOnly.FromDateTime(DateTime.UtcNow.Date),
             Sunrise = new TimeOnly(6, 0),
-            Sunset = new TimeOnly(18, 0)
+            Sunset = new TimeOnly(18, 0),
+            City =  new City{
+                Name = "Miskolc",
+                State = "Borsod-Abaúj-Zemplén",
+                Country = "Hungary",
+                Latitude = 48.1030,
+                Longitude = 20.7789
+            },
+            CityId = 1
         };
         
         context.Cities.AddRange(city);
