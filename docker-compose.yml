@@ -44,12 +44,9 @@
       - JwtSettings__ValidAudience=${JWTSETTINGS__VALIDAUDIENCE}
         
   solarwatch-frontend:
-    image: solarwatch
+    image: solarwatchfrontend
     build:
-      context: .
-      dockerfile: ./solarwatchfrontend/solarwatch/Dockerfile
+      context: ./solarwatchfrontend/solarwatch
+      dockerfile: Dockerfile
     ports:
       - "5173:5173"
-    volumes:
-      - .:/app
-      - /app/node_modules
