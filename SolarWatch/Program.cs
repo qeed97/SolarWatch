@@ -68,17 +68,6 @@ builder.Services
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<SolarDbContext>();
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowSpecificOrigins", innerBuilder =>
-    {
-        innerBuilder
-            .WithOrigins("http://localhost:5173")
-            .AllowAnyMethod()
-            .AllowAnyHeader()
-            .AllowCredentials();
-    });
-}); 
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -91,9 +80,21 @@ var app = builder.Build();
 
 using var scope = app.Services.CreateScope();
 
-var authenticationSeeder = scope.ServiceProvider.GetRequiredService<AuthenticationSeeder>();
-authenticationSeeder.AddRoles();
-authenticationSeeder.AddAdmin();
+var services = scope.ServiceProvider;
+try
+{
+    var context = services.GetRequiredService<SolarDbContext>();
+    context.Database.Migrate();
+    Console.WriteLine("Migrating database associated with context");
+    var authenticationSeeder = scope.ServiceProvider.GetRequiredService<AuthenticationSeeder>();
+    authenticationSeeder.AddRoles();
+    authenticationSeeder.AddAdmin();
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"An error occurred while migrating the database: {ex.Message}");
+}
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

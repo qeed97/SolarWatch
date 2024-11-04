@@ -17,7 +17,7 @@ function Login({setUserLoginCookies}) {
 
     useEffect(() => {
         if (cookies.user){
-            navigate('/solarforecast');
+            navigate('/');
         }
     }, [cookies]);
 
@@ -30,7 +30,6 @@ function Login({setUserLoginCookies}) {
             body: JSON.stringify(userDetails)
         });
         const data = await response.json();
-        console.log(data);
         return data;
     }
 
@@ -83,7 +82,10 @@ function Login({setUserLoginCookies}) {
                             ) {
                                 try {
                                     const data = await handleLogin();
-                                    console.log(data);
+                                    if (!data.token) {
+                                        showErrorToast("Some of your details are invalid");
+                                        return;
+                                    }
                                     setUserLoginCookies(data.token);
                                     showSuccessToast('Successfully signed in!');
 

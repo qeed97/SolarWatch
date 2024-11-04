@@ -16,7 +16,6 @@ public class LocationJsonProcessor : ILocationJsonProcessor
             Country = jsonElement.GetProperty("country").GetString(),
             Latitude = jsonElement.GetProperty("lat").GetDouble(),
             Longitude = jsonElement.GetProperty("lon").GetDouble(),
-            State = jsonElement.GetProperty("state").GetString(),
         };
 
         return city;

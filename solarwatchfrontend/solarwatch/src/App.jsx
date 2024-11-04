@@ -19,7 +19,7 @@ function App() {
               <Routes>
                   <Route path="/Register" element={<Register/>} />
                   <Route path="/Login" element={<Login cookies={cookies} setUserLoginCookies={setUserLoginCookies} />} />
-                  <Route path="/solarforecast" element={<SolarForecast cookies={cookies} setUserLoginCookies={setUserLoginCookies} />} />
+                  <Route path="/" element={<SolarForecast cookies={cookies} setUserLoginCookies={setUserLoginCookies} />} />
               </Routes>
               <Toaster/>
           </BrowserRouter>

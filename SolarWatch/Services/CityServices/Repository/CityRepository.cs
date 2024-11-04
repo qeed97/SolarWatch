@@ -45,7 +45,6 @@ public class CityRepository(SolarDbContext context) : ICityRepository
     {
         city.Name = updatedCity.Name;
         city.Country = updatedCity.Country;
-        city.State = updatedCity.State;
         city.Longitude = updatedCity.Longitude;
         city.Latitude = updatedCity.Latitude;
         return city;
@@ -59,8 +58,7 @@ public class CityRepository(SolarDbContext context) : ICityRepository
         {
             Id = city.Id, Name = city.Name, SolarData = city.SolarData,
             Country = city.Country, 
-            Latitude = city.Latitude, Longitude = city.Longitude, 
-            State = city.State
+            Latitude = city.Latitude, Longitude = city.Longitude
         };
     }
 

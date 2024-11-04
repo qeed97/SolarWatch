@@ -30,8 +30,6 @@ public class SolarDbContext : IdentityDbContext<IdentityUser, IdentityRole, stri
             entity.Property(c => c.Name).IsRequired();
             
             entity.Property(c => c.Country).IsRequired();
-
-            entity.Property(c => c.State);
             
             entity.Property(c => c.Latitude).IsRequired();
             

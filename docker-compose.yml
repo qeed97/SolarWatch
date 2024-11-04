@@ -14,17 +14,6 @@
       timeout: 10s
       retries: 5
   
-  db-setup-migrate:
-    image: mcr.microsoft.com/dotnet/sdk:8.0
-    command: sh -c "cat /app/SolarWatch/SolarWatch.csproj && dotnet tool install --global dotnet-ef && /root/.dotnet/tools/dotnet-ef database update --project app/SolarWatch/SolarWatch.csproj"
-    depends_on:
-      - solar-watch
-    volumes:
-      - .:/app
-    env_file:
-      - .env
-    environment:
-      - CONNECTIONSTRING=Server=${DOCKER_SERVER_NAME},${DB_PORT};Database=${DB_NAME};User Id=${DB_USERNAME};Password=${DB_USER_PASSWORD};Encrypt=false;
       
   solarwatch-backend:
     image: solarwatch
@@ -32,7 +21,7 @@
       context: .
       dockerfile: SolarWatch/Dockerfile
     depends_on:
-      - db-setup-migrate
+      - solar-watch
     ports:
       - "8080:8080"
     env_file:

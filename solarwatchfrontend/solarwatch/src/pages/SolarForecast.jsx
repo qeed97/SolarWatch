@@ -12,7 +12,6 @@ function SolarForecast({setUserLoginCookies}) {
     const [solarForecast, setSolarForecast] = useState({});
 
     const getSolarForecast = async () => {
-        console.log("Authorization Token:", cookies.user);
         const response = await fetch("/api/SolarWatch/GetSolarWatch?date="+solarData.Date+"&cityName="+solarData.CityName,{
             method: "GET",
             headers: {"Authorization": "Bearer " + cookies.user,

@@ -34,7 +34,6 @@ public class SolarWatchController : ControllerBase
     [HttpGet("GetSolarWatch"), Authorize(Roles ="User, Admin")]
     public async Task<ActionResult<SolarData>> Get(DateOnly date, string cityName)
     {
-        // TODO: MAKE CITY REQUIRED (MAYBE DATE TOO)
         try
         {
             Console.WriteLine(date);

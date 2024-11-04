@@ -46,7 +46,6 @@ public class SolarWatchWebApplicationFactory : WebApplicationFactory<Program>
         var city = new City
         {
             Name = "Miskolc",
-            State = "Borsod-Abaúj-Zemplén",
             Country = "Hungary",
             Latitude = 48.1030,
             Longitude = 20.7789,
@@ -60,7 +59,6 @@ public class SolarWatchWebApplicationFactory : WebApplicationFactory<Program>
                     City = new City
                     {
                         Name = "Miskolc",
-                        State = "Borsod-Abaúj-Zemplén",
                         Country = "Hungary",
                         Latitude = 48.1030,
                         Longitude = 20.7789
@@ -77,7 +75,6 @@ public class SolarWatchWebApplicationFactory : WebApplicationFactory<Program>
             Sunset = new TimeOnly(18, 0),
             City =  new City{
                 Name = "Miskolc",
-                State = "Borsod-Abaúj-Zemplén",
                 Country = "Hungary",
                 Latitude = 48.1030,
                 Longitude = 20.7789

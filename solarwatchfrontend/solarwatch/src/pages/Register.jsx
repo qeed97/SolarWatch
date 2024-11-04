@@ -28,13 +28,10 @@ function Register(props) {
             body: JSON.stringify(newUserData)
         });
         const data = await response.json();
-        logging(data);
         return data;
     };
 
-    function logging(data) {
-        console.log(data);
-    }
+   
 
     return (
         <div className='relative flex justify-center top-48'>
