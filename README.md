@@ -5,6 +5,7 @@ SolarWatch is an ASP.NET Web API project that provides the sunrise and sunset ti
 - Core Features:
       -  sunrise and sunset times for a given city on a given date
       -  Register, Login, Logout
+
 UI:
 ![[PROJECTPICTURE.png]]
 
