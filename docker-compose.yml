@@ -3,13 +3,13 @@
     image: mcr.microsoft.com/mssql/server:2022-latest
     environment:
       ACCEPT_EULA: "Y"
-      SA_PASSWORD: Hurkakolbasz24?
+      SA_PASSWORD: ${DB_USER_PASSWORD}
     ports:
       - "1433:1433"
     env_file:
       - .env
     healthcheck:
-      test: [ "CMD", "sqlcmd", "-S", "localhost", "-U", "sa", "-P", "Hurkakolbasz24?", "-Q", "SELECT 1" ]
+      test: [ "CMD", "sqlcmd", "-S", "localhost", "-U", "sa", "-P $${self:services.mysql.environment.SA_PASSWORD}", "-Q", "SELECT 1" ]
       interval: 30s
       timeout: 10s
       retries: 5
