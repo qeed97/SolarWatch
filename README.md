@@ -75,7 +75,7 @@ JWTSETTINGS__VALIDAUDIENCE={JWT_AUDIENCE}
       ```bash
       dotnet ef migrations add InitialCreate
       ```
-      this will create a migration script to run when you run the project.
+      to create a migration. The application will apply the migrations in the Program.cs file.
 		- Finally, we can run
       ```bash
       docker compose up --build
@@ -95,7 +95,7 @@ JWTSETTINGS__VALIDAUDIENCE={JWT_AUDIENCE}
  	    ```bash 
     	dotnet ef migrations add InitialCreate
     	``` 
-      to create a migration.
+      to create a migration. The application will apply the migrations in the Program.cs file.
 	- Finally run
      ```bash
      docker compose up --build
