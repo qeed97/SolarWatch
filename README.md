@@ -1,21 +1,38 @@
+<a id="readme-top"></a>
+
+
 # SolarWatch
 
 ## About
+
+![project screenshot][screenshot]
+
+
 SolarWatch is an ASP.NET Web API project that provides the sunrise and sunset times for a given city on a given date, in UTC times.
 - Core Features:
   - sunrise and sunset times for a given city on a given date
   - Register, Login, Logout
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ## Built Using:
-- React/ Vite
-- Tailwind CSS
-- ASP.NET
-- MSSQL
-- Docker
+
+<p align="left">
+  <a href="https://react.dev/" target="_blank"><img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=white" alt="React"/></a>
+  <a href="https://vitejs.dev/" target="_blank"><img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite"/></a>
+  <a href="https://dotnet.microsoft.com/en-us/" target="_blank"><img src="https://img.shields.io/badge/.NET-512BD4?style=for-the-badge&logo=dotnet&logoColor=white" alt=".NET"/></a>
+  <a href="https://www.mysql.com/" target="_blank"><img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL"/></a>
+  <a href="https://www.docker.com/" target="_blank"><img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker"/></a>
+  <a href="https://developer.mozilla.org/en-US/docs/Web/CSS" target="_blank"><img src="https://img.shields.io/badge/CSS-1572B6?style=for-the-badge&logo=css3&logoColor=white" alt="CSS"/></a>
+</p>
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Prerequisites: 
 - Docker
 - Terminal / Powershell
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## How To Run
 
@@ -101,3 +118,13 @@ JWTSETTINGS__VALIDAUDIENCE={JWT_AUDIENCE}
      docker compose up --build
      ``` 
 	- Note: The way to project is setup on the repo, it expects the backend on port `8080` and the frontend on port `5173`. If you wish to change these you need to manually modify the frontend `Dockerfile` and `vite.config.js`, otherwise enjoy! The only port that needs to open on your machine is `5173`.
+
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+
+
+
+[screenshot]: PROJECTPICTURE.PNG
